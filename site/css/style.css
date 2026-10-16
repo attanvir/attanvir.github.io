@@ -500,6 +500,8 @@ button { font: inherit; }
 .book__info { margin-bottom: 16px; }
 .book__title { margin: 0; font-family: var(--font-serif); font-weight: 700; font-size: 23px; line-height: 1.12; color: var(--gold-light); text-wrap: balance;
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.book__title a { color: inherit; text-decoration: none; }
+.book__title a:hover { text-decoration: underline; text-underline-offset: 3px; }
 .book__author { margin: 8px 0 0; font-size: 13.5px; font-weight: 600; line-height: 1.4; color: var(--text-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .book__note { margin: 6px 0 0; font-size: 14px; line-height: 1.45; color: var(--text-soft);
   display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
@@ -677,6 +679,18 @@ button { font: inherit; }
 .total { display: flex; align-items: baseline; justify-content: space-between; padding: 18px 0 6px; font-size: 16px; }
 .total strong { font-family: var(--font-serif); font-weight: 700; font-size: 34px; color: var(--gold-light); font-variant-numeric: lining-nums; }
 .hint { margin: 0 0 20px; font-size: 14px; color: var(--text-soft); }
+
+/* Отдельная страница книги (books/<id>.html): обложка слева, текст и кнопки справа */
+.book-page { display: grid; gap: 32px; align-items: start; }
+.book-page__media { display: grid; gap: 16px; }
+.book-page__cover, .book-page__photo { width: min(100%, 380px); height: auto; border-radius: var(--media-radius); background: var(--field-bg); }
+.book-page__title { margin: 0; font-family: var(--font-serif); font-weight: 700; font-size: clamp(28px, 4vw, 40px); line-height: 1.12; color: var(--gold-light); text-wrap: balance; }
+.book-page__text .book__author, .book-page__text .book__note { white-space: normal; overflow: visible; display: block; }
+.book-page__price { margin: 22px 0 22px; }
+.book-page__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+@media (min-width: 760px) {
+  .book-page { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 56px; }
+}
 .hint--center { text-align: center; margin: 12px 0 0; }
 /* Под кнопкой WhatsApp: «или сделайте заказ» между двумя линиями и контурная кнопка Telegram */
 .order__or { display: flex; align-items: center; gap: 12px; margin: 16px 0 12px; font-size: 14px; color: var(--text-soft); }

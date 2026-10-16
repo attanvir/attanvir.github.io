@@ -79,16 +79,6 @@ window.BOOKS = [
     inStock: true,
   },
   {
-    id: "40-hadisov",
-    title: "40 хадисов про женщин",
-    author: "Д-р Ибрахим Рафикъ ат-Тауиль",
-    price: 2000,
-    image: "img/books/40-hadisov.jpg",
-    note: "Книга для сестёр: после каждой темы есть место для заметок",
-    preorder: true,
-    inStock: true,
-  },
-  {
     id: "lymiya",
     title: "Разъяснение поэмы «Лямия»",
     author: "Шейх уль-Ислам Ибн Теймийя",

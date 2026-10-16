@@ -5,7 +5,7 @@ name: Публикация сайта
 on:
   push:
     branches: [main]
-    paths: ["site/**"]
+    paths: ["site/**", "scripts/**"]
   workflow_dispatch:
 
 permissions:
@@ -21,10 +21,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Страницы книг и карточки каталога для поисковиков собираются из site/data/books.js
+      - name: Собрать страницы книг и карточки каталога
+        run: node scripts/build-seo.mjs
+
       # Браузер держит CSS и JS в кэше до 10 минут. Без новой версии в адресе после
       # обновления сайта он мог взять новую страницу со старым скриптом, и страница ломалась.
       - name: Привязать версии CSS и JS к коммиту
-        run: sed -i "s/?v=dev/?v=${GITHUB_SHA::8}/g" site/index.html
+        run: find site -name "*.html" -exec sed -i "s/?v=dev/?v=${GITHUB_SHA::8}/g" {} +
 
       - name: Опубликовать сайт
         uses: peaceiris/actions-gh-pages@v4

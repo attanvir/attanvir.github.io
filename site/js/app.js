@@ -76,14 +76,18 @@
   /* ---------- Каталог ---------- */
   function buildCatalog() {
     var grid = $("#catalogGrid");
+    grid.textContent = "";   // карточки из HTML (для поисковиков) заменяем живыми, с кнопками и листанием фото
     BOOKS.forEach(function (b) {
       var card = el("article", "book reveal");
       card.dataset.id = b.id;
 
       var body = el("div", "book__body");
       var info = el("div", "book__info");   // текст отдельно: под ним отступ, ниже линия и строка с ценой
-      var title = el("h3", "book__title", b.title);
-      title.title = b.title;   // название обрезается до двух строк, полностью видно во всплывающей подсказке
+      var title = el("h3", "book__title");
+      var link = el("a", null, b.title);   // название ведёт на отдельную страницу книги
+      link.href = "books/" + b.id + ".html";
+      link.title = b.title;   // название обрезается до двух строк, полностью видно во всплывающей подсказке
+      title.append(link);
       var author = el("p", "book__author", b.author);
       author.title = b.author;
       info.append(title, author);
@@ -239,7 +243,6 @@
     var box = $("#contactsList");
     var items = [
       { key: "whatsapp", title: "WhatsApp", sub: "Написать напрямую", href: waLink("Ассаламу алейкум! У меня вопрос по книгам.") },
-      { key: "telegram", title: "Чат в Telegram", sub: "Задать вопрос", href: SITE.telegramChat || SITE.telegram },
       { key: "telegram", title: "Канал в Telegram", sub: "Новинки и поступления", href: SITE.telegram }
     ];
     items.forEach(function (it) {
