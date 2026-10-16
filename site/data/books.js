@@ -94,6 +94,16 @@ window.BOOKS = [
     preorder: true,
     inStock: true,
   },
+  {
+    id: "lymiya",
+    title: "Разъяснение поэмы «Лямия»",
+    author: "Шейх уль-Ислам Ибн Теймийя",
+    price: 2200,
+    image: "img/books/lymiya.jpg",
+    note: "Разъяснение: шейх Абу Хузейма аль-Мудари",
+    preorder: false,
+    inStock: true,
+  },
 ];
 
 /*
