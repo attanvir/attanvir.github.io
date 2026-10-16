@@ -9,7 +9,7 @@ import { dirname, join } from "node:path";
 import vm from "node:vm";
 
 const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
-const BASE = "https://at-tanvir.github.io/";
+const BASE = "https://attanvir.github.io/";
 const YEAR = new Date().getFullYear();
 const TODAY = new Date().toISOString().slice(0, 10);
 

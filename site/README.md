@@ -3,7 +3,7 @@
 Обычный статичный сайт: без сервера, без базы, без установки. Работает при двойном клике на `index.html`
 и размещается на любом статичном хостинге (GitHub Pages, Netlify, Vercel, обычный хостинг).
 
-Сайт в интернете: https://at-tanvir.github.io/ (GitHub Pages, репозиторий `at-tanvir/at-tanvir.github.io`).
+Сайт в интернете: https://attanvir.github.io/ (GitHub Pages, репозиторий `attanvir/attanvir.github.io`).
 После каждого пуша в ветку `main`, где изменилась папка `site`, сайт обновляется сам примерно за минуту.
 
 ## Где что лежит
