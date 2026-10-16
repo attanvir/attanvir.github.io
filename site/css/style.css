@@ -12,6 +12,47 @@
   (раздел «Появление при прокрутке» ниже и «Движение» в js/app.js).
   Все цвета и шрифты меняются в блоке :root.
 */
+/* Шрифты лежат на сайте (fonts/), к серверам Google страница не обращается. Лицензия SIL Open Font License */
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500 600; font-display: swap;
+  src: url("../fonts/CormorantGaramond-italic-500-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: italic; font-weight: 500 600; font-display: swap;
+  src: url("../fonts/CormorantGaramond-italic-500-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: normal; font-weight: 500 700; font-display: swap;
+  src: url("../fonts/CormorantGaramond-normal-500-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Cormorant Garamond"; font-style: normal; font-weight: 500 700; font-display: swap;
+  src: url("../fonts/CormorantGaramond-normal-500-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Manrope"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url("../fonts/Manrope-normal-400-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Manrope"; font-style: normal; font-weight: 400 800; font-display: swap;
+  src: url("../fonts/Manrope-normal-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Montserrat"; font-style: normal; font-weight: 600 700; font-display: swap;
+  src: url("../fonts/Montserrat-normal-600-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Montserrat"; font-style: normal; font-weight: 600 700; font-display: swap;
+  src: url("../fonts/Montserrat-normal-600-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 /* Шрифт заголовков. Файл лежит в fonts/, лицензия SIL Open Font License */
 @font-face {
   font-family: "Bebas Neue";
@@ -255,7 +296,7 @@ button { font: inherit; }
 .hero {
   position: relative; z-index: 0; overflow: hidden;
   display: flex; flex-direction: column;
-  padding: 32px 0 calc(28px + var(--sheet-r));   /* снизу запас: сюда заходит лист следующей секции */
+  padding: 16px 0 calc(16px + var(--sheet-r));   /* снизу запас: сюда заходит лист следующей секции */
   background-color: var(--bg);
 }
 /* Слои снизу вверх: фото библиотеки, бордовое затемнение (около 80%), виньетка.
@@ -263,15 +304,16 @@ button { font: inherit; }
    Затемнение стоит на месте и книзу сходится ровно в --wine. */
 .hero__photo { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .hero__photo::before {
-  content: ""; position: absolute; inset: 0;
-  background: url("../img/library.jpg") center / cover no-repeat;
+  content: ""; position: absolute; top: 0; left: 0; right: 0; aspect-ratio: 1100 / 1340;
+  background: url("../img/hero-book.jpg") center / cover no-repeat;   /* телефон: фото во всю ширину, название книги целиком наверху */
+  -webkit-mask-image: linear-gradient(180deg, #000 62%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 62%, transparent 100%);   /* низ фото тает в бордовый, без резкой границы */
   transform: translate3d(0, var(--parallax, 0px), 0);
 }
+/* Телефон: сверху фото почти без затемнения, чтобы читалось название книги, ниже плавно уходит в бордовый под текстом */
 .hero__photo::after {
   content: ""; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 75% at 50% 42%, rgba(23, 1, 4, 0) 45%, rgba(23, 1, 4, .55) 100%),
-    linear-gradient(180deg, rgba(var(--wine-rgb), .8) 0%, rgba(var(--wine-rgb), .78) 50%, rgba(var(--wine-rgb), .9) 78%, var(--wine) 100%);
+  background: linear-gradient(180deg, rgba(var(--wine-rgb), .62) 0%, rgba(var(--wine-rgb), .66) 30%, rgba(var(--wine-rgb), .86) 52%, rgba(var(--wine-rgb), .94) 66%, var(--wine) 82%);
 }
 /* Золотое свечение. Слой внутри (.hero__layer) отстаёт от прокрутки вместе с фото,
    а маска на неподвижной обёртке растворяет его книзу, где бы он ни оказался. */
@@ -294,8 +336,8 @@ button { font: inherit; }
   background: linear-gradient(180deg, rgba(var(--wine-rgb), 0) 0%, rgba(var(--wine-rgb), .55) 40%, var(--wine) 82%);
 }
 /* Всё по центру в одну колонку: каллиграфия, название, кнопки, цитата */
-.hero__inner { position: relative; z-index: 1; flex: 1; display: grid; align-content: center; justify-items: center; gap: 18px; text-align: center; }
-.hero__art { width: min(78%, 420px, 46svh); }
+.hero__inner { position: relative; z-index: 1; flex: 1; display: grid; align-content: end; justify-items: center; gap: 10px; text-align: center; padding-top: min(30vw, 200px); }   /* сверху оставлено место под название книги на фото */
+.hero__art { width: min(62%, 420px, 34svh); }
 .hero__text { display: flex; flex-direction: column; align-items: center; }
 .hero__calligraphy {
   width: 100%; height: auto;
@@ -317,10 +359,10 @@ button { font: inherit; }
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
 
 .hero__title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 68px; line-height: .9; letter-spacing: .04em; color: var(--gold-light); text-shadow: var(--title-shadow); }
-.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 16px; margin-top: 26px; }
+.hero__actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px 16px; margin-top: 16px; }
 /* Цитата по центру, ширина рассчитана на две-три строки. Над и под ней тонкий разделитель:
    линия тает к краям, в центре контур восьмиконечной звезды. SVG служит маской, цвет берётся из --gold. */
-.epigraph { margin: 36px 0 0; max-width: 560px; }
+.epigraph { margin: 20px 0 0; max-width: 560px; }
 .epigraph::before, .epigraph::after {
   --divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 13'%3E%3Cdefs%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='0' x2='180'%3E%3Cstop offset='0' stop-opacity='0'/%3E%3Cstop offset='.42'/%3E%3Cstop offset='.58'/%3E%3Cstop offset='1' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M0 6h79v1H0zM101 6h79v1h-79z'/%3E%3Cpath fill='none' stroke='%23000' stroke-width='.9' stroke-linejoin='round' d='M96 6.5L94.24 8.26V10.74H91.76L90 12.5L88.24 10.74H85.76V8.26L84 6.5L85.76 4.74V2.26H88.24L90 .5L91.76 2.26H94.24V4.74Z'/%3E%3C/svg%3E");
   content: ""; display: block; width: 180px; max-width: 100%; height: 13px; margin: 0 auto;
@@ -364,6 +406,9 @@ button { font: inherit; }
   transform-origin: 50% var(--seen, 0px);   /* уменьшается к шапке: верх видимой части от неё не отходит */
   will-change: transform;
 }
+/* Первый экран остаётся на месте и уходит вверх вместе с прокруткой: без уменьшения и затемнения */
+.stack.is-stacked > :first-child { position: relative; transform: none; will-change: auto; }
+.stack.is-stacked > :first-child::before { content: none; }
 /* Затемнение с размытием поверх листа. Градиент маски ложится только на видимую часть листа:
    сверху (у шапки) слой в полную силу, книзу тает. Выше видимой части маска пустая.
    Сила --k набирается быстрее накрытия и доходит до полной, когда следующий лист прошёл 70% пути */
@@ -510,23 +555,26 @@ button { font: inherit; }
 .qty__btn:active { transform: scale(.92); }
 .qty__num { min-width: 38px; text-align: center; font-weight: 800; font-size: 17px; color: var(--text); font-variant-numeric: tabular-nums; }
 
-/* Под каталогом: призыв следить за новинками и две кнопки, в Telegram-канал и в Instagram */
+/* Под каталогом: призыв следить за новинками и кнопка в Telegram-канал */
 .follow { margin-top: 56px; text-align: center; }
 .follow__text { margin: 0 auto 24px; max-width: 30ch; font-family: var(--font-serif); font-weight: 600; font-size: 26px; line-height: 1.25; color: var(--gold-light); text-wrap: balance; }
 .follow__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
-/* ---------- Как заказать ---------- */
-.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px; counter-reset: step; }
-.step { position: relative; counter-increment: step; display: grid; grid-template-columns: 52px minmax(0, 1fr); align-content: start; padding-top: 20px; border-top: 1px solid var(--line); }
-/* Золотая линия над шагом, при появлении шага прорисовывается слева направо */
-.step::after {
-  content: ""; position: absolute; top: -1px; left: 0; width: 100%; height: 2px;
-  background: linear-gradient(90deg, var(--gold), transparent);
-  transform-origin: left;
+/* ---------- Под заказ ---------- */
+/* Текст и кнопки, ниже три этапа. Без фото и декоративных линий */
+.custom { display: grid; gap: 28px; }
+.custom__title { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 48px; line-height: .95; letter-spacing: .04em; color: var(--gold-light); text-wrap: balance; }
+.custom__lead { margin: 18px 0 0; max-width: 36ch; font-size: 17px; line-height: 1.6; color: var(--text-soft); text-wrap: pretty; }
+.custom__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 28px; }
+.custom__steps { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: step; }
+.custom__step {
+  counter-increment: step;
+  display: grid; grid-template-columns: 38px minmax(0, 1fr); column-gap: 8px; align-items: baseline;
+  padding: 10px 0;
 }
-.step::before { content: counter(step); grid-row: span 2; font-family: var(--font-serif); font-weight: 600; font-size: 46px; line-height: .9; color: var(--gold); }
-.step__title { margin: 0 0 6px; font-family: var(--font-display); font-weight: 700; font-size: 27px; line-height: 1.02; letter-spacing: .03em; color: var(--text); }
-.step__text { margin: 0; font-size: 15px; color: var(--text-soft); max-width: 30ch; }
+.custom__step::before { content: counter(step, decimal-leading-zero); grid-row: span 2; font-family: var(--font-serif); font-weight: 600; font-size: 20px; line-height: 1.2; color: var(--gold); font-variant-numeric: lining-nums; }
+.custom__step-title { margin: 0; font-size: 16px; font-weight: 700; line-height: 1.35; color: var(--text); }
+.custom__step-text { margin: 0; font-size: 14.5px; line-height: 1.45; color: var(--text-soft); }
 
 /* ---------- Отзывы ---------- */
 /* Отзывы как карточки книг: пергамент с золотой кромкой на бордовом фоне, как в каталоге.
@@ -535,9 +583,6 @@ button { font: inherit; }
    Наведение не меняет отзыв: он не кликается. В две колонки отзывы разной длины укладываются плотно (columns).
    Отступ между отзывами это прозрачный низ .review, а не margin: так он не переносится на верх следующей колонки */
 .reviews { column-gap: 24px; margin-bottom: -24px; }
-/* Под отзывами золотая кнопка в Instagram, к актуальным с остальными отзывами */
-.reviews__more { display: flex; justify-content: center; margin-top: 40px; }
-.reviews__more .btn { max-width: 100%; height: auto; min-height: 54px; padding: 14px 30px; text-align: center; line-height: 1.25; }
 .review { break-inside: avoid; margin: 0; padding-bottom: 24px; color: var(--text); }
 .review__card {
   margin: 0; padding: 28px 30px 22px;
@@ -633,6 +678,11 @@ button { font: inherit; }
 .total strong { font-family: var(--font-serif); font-weight: 700; font-size: 34px; color: var(--gold-light); font-variant-numeric: lining-nums; }
 .hint { margin: 0 0 20px; font-size: 14px; color: var(--text-soft); }
 .hint--center { text-align: center; margin: 12px 0 0; }
+/* Под кнопкой WhatsApp: «или сделайте заказ» между двумя линиями и контурная кнопка Telegram */
+.order__or { display: flex; align-items: center; gap: 12px; margin: 16px 0 12px; font-size: 14px; color: var(--text-soft); }
+.order__or::before, .order__or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.order__alt { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.order__alt .btn { padding: 0 12px; gap: 8px; white-space: nowrap; }   /* на узком телефоне кнопки встают одна под другой */
 
 .field { margin: 0 0 16px; padding: 0; border: 0; min-width: 0; }
 .field label, .field legend { display: block; margin-bottom: 7px; padding: 0; font-weight: 700; font-size: 14px; letter-spacing: .02em; color: var(--text); }
@@ -661,6 +711,7 @@ button { font: inherit; }
 .radio input:active + span { transform: scale(.97); }
 .radio input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
 .form-status { margin: 12px 0 0; min-height: 1.2em; text-align: center; font-size: 14px; color: var(--error); }
+.form-status.is-ok { color: var(--text); }   /* подсказка после отправки в Telegram, а не ошибка */
 
 body.lock { overflow: hidden; }
 
@@ -675,22 +726,61 @@ body.lock { overflow: hidden; }
   .js .reveal.is-visible { animation: reveal .8s var(--ease-reveal) var(--delay, 0s) backwards; }
   /* Орнамент под заголовком раскрывается от центра к краям чуть позже самого заголовка */
   .js .reveal.is-visible .ornament { animation: draw 1s var(--ease-reveal) calc(var(--delay, 0s) + .2s) backwards; }
-  /* Золотая линия над шагом прорисовывается слева направо, круг с кавычками над отзывом разворачивается */
-  .js .step.is-visible::after { animation: draw 1s var(--ease-reveal) calc(var(--delay, 0s) + .25s) backwards; }
+  /* Круг с кавычками над отзывом разворачивается */
   .js .review.is-visible .review__card::before { animation: turn .9s var(--ease-reveal) calc(var(--delay, 0s) + .2s) backwards; }
 }
 @keyframes reveal { from { opacity: 0; transform: translate3d(0, 30px, 0); } }
 @keyframes draw { from { opacity: 0; transform: scaleX(0); } }
 @keyframes turn { from { opacity: 0; transform: rotate(-90deg) scale(.4); } }
 
+/* ---------- Переходы между разделами ---------- */
+/* Нажатие на пункт меню или кнопку-ссылку не прокручивает страницу, а переводит на другой «разворот».
+   Слой .vt (создаёт js/app.js, раздел «Переходы») закрывает экран, страница под ним перескакивает на нужное место,
+   слой уходит. Его цвет всегда цвет раздела, куда идём: бордовый или пергамент.
+   Каталог без слоя: обычная плавная прокрутка. Два приёма, по назначению:
+   .vt--sheet  «О нас», «Как заказать», «Отзывы». Закрывает экран лист со скруглёнными углами, как листы страницы;
+                на нём название, лист уходит вверх.
+   .vt--breath  контакты и «наверх». Без листа: экран смазывается золотым светом из точки нажатия, раздел проступает из размытия. */
+.vt {
+  --vt-ink: var(--gold-light); --vt-line: #efd08f;
+  position: fixed; inset: 0; z-index: 100; overflow: hidden;
+  touch-action: none; overscroll-behavior: contain;
+}
+.vt[hidden] { display: none; }
+.vt--parch { --vt-ink: var(--wine); --vt-line: #8f6420; }
+.vt__shape { position: absolute; inset: 0; background: var(--wine); will-change: transform, opacity; }
+.vt--parch .vt__shape { background: var(--grain), var(--parchment); }
+
+/* Лист: скруглён со всех сторон, чтобы при выезде снизу и при уходе вверх было видно закругление */
+.vt--sheet .vt__shape { border-radius: var(--sheet-r); box-shadow: 0 0 0 1px var(--vt-line), 0 -24px 60px -12px rgba(10, 0, 2, .7); }
+
+/* Дыхание: свет из точки нажатия и размытие того, что под слоем */
+.vt--breath .vt__shape {
+  background: radial-gradient(130% 100% at var(--ox) var(--oy), rgba(239, 208, 143, .42), rgba(var(--wine-deep-rgb), .9) 62%);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+}
+.vt--breath.vt--parch .vt__shape { background: radial-gradient(130% 100% at var(--ox) var(--oy), rgba(255, 252, 244, .75), rgba(222, 205, 176, .92) 62%); }
+
+/* Название раздела. Золотая волна: градиент впятеро шире слова, двигается его позиция (100%, 50%, 0%).
+   Слева и справа от середины градиент прозрачный, поэтому волна идёт через слово и выходит с другой стороны */
+.vt__title { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 18px; padding: 0 16px; text-align: center; pointer-events: none; }
+.vt__title[hidden] { display: none; }
+.vt__word {
+  font-family: var(--font-display); font-weight: 700; font-size: clamp(60px, 15vw, 140px); line-height: .95; letter-spacing: .04em; padding: 0 .06em;
+  color: transparent;
+  background: linear-gradient(90deg, transparent 0, transparent 20%, var(--vt-ink) 38%, var(--vt-ink) 62%, transparent 80%, transparent 100%) 100% 0 / 500% 100% no-repeat;
+  -webkit-background-clip: text; background-clip: text;
+}
+.vt__orn { width: min(320px, 70vw); height: auto; opacity: 0; }
+.vt--parch .vt__orn { filter: brightness(.62) saturate(1.3); }
+
 /* ---------- Планшет ---------- */
 @media (min-width: 640px) {
   .cart-btn__label { display: inline; }
   .hero__title { font-size: 92px; }
   .section__title { font-size: 64px; }
-  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; }
-  .step { display: block; padding-top: 22px; }
-  .step::before { display: block; margin-bottom: 10px; font-size: 52px; }
+  .custom { gap: 32px; }
+  .custom__title { font-size: 44px; }
 }
 
 /* ---------- Десктоп ---------- */
@@ -701,7 +791,14 @@ body.lock { overflow: hidden; }
   :root { --sheet-r: 36px; }
   .hero { min-height: calc(100svh - 68px); padding: 56px 0 calc(36px + var(--sheet-r)); }
   /* Запас сверху под параллакс: фото отстаёт от прокрутки максимум на 18% высоты экрана */
-  .hero__photo::before { inset: -20% 0 0; }
+  .hero__photo::before { inset: -20% 0 0; aspect-ratio: auto; background-position: 50% 12%; -webkit-mask-image: none; mask-image: none; }
+  .hero__inner { padding-top: 0; align-content: center; }
+  /* Десктоп: текст стоит по центру прямо на книге, поэтому там затемнение плотнее, а надписи книги видны по краям */
+  .hero__photo::after {
+    background:
+      radial-gradient(ellipse 42% 70% at 50% 46%, rgba(var(--wine-rgb), .78) 0%, rgba(var(--wine-rgb), .5) 60%, rgba(var(--wine-rgb), 0) 100%),
+      linear-gradient(180deg, rgba(var(--wine-rgb), .6) 0%, rgba(var(--wine-rgb), .66) 40%, rgba(var(--wine-rgb), .88) 70%, var(--wine) 90%);
+  }
   .hero__inner { gap: 20px; }
   .hero__art { width: min(460px, 42svh); }
   .hero__title { font-size: 112px; }
@@ -709,7 +806,12 @@ body.lock { overflow: hidden; }
   .hero .epigraph blockquote { font-size: 24px; }
   .section { --pad: 104px; }
   .section__head { margin-bottom: 56px; }
-  .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .custom__title { font-size: clamp(60px, 6vw, 76px); }
+  .custom__steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .custom__step { display: block; padding: 18px 16px 0 0; }
+  .custom__step + .custom__step { padding-left: 20px; }
+  .custom__step::before { display: block; margin-bottom: 6px; }
+  .custom__lead { font-size: 18px; }
   .reviews { columns: 2; }
   .footer { padding: 40px 0; }
   .contacts-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 56px; }
@@ -728,18 +830,10 @@ body.lock { overflow: hidden; }
   .books { --cols: 4; }
 }
 
-/* На телефоне отзывы идут в одну колонку и страница становится длинной: видны только первые три,
-   остальные открываются кнопкой «Смотреть все отзывы в Instagram» */
-@media (max-width: 639px) {
-  .review:nth-child(n+4) { display: none; }
-}
-
 @media (max-width: 440px) {
   .follow { margin-top: 44px; }
   .follow__text { font-size: 22px; }
-  .follow__actions .btn { width: 100%; }   /* кнопки друг под другом во всю ширину, в них легко попасть пальцем */
-  .reviews__more .btn { padding: 14px 20px; font-size: 15px; }
-  .reviews__more .btn > svg:last-child { display: none; }   /* без стрелки кнопка входит в одну строку */
+  .follow__actions .btn, .custom__actions .btn { width: 100%; }   /* кнопки друг под другом во всю ширину, в них легко попасть пальцем */
   .review { padding-bottom: 16px; }
   .reviews { margin-bottom: -16px; }
   .review__card { padding: 22px 20px 18px; }

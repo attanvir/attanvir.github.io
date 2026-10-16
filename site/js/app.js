@@ -70,8 +70,7 @@
   var ARROW = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 6l6 6-6 6"/></svg>';
   var ICONS = {
     whatsapp: '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.1 1.4Z"/></svg>',
-    telegram: '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M21.9 4.2 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L6.1 13.5 1.2 12c-1.1-.3-1.1-1 .2-1.6L20.5 3c.9-.3 1.7.2 1.4 1.2Z"/></svg>',
-    instagram: '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor"/></svg>'
+    telegram: '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M21.9 4.2 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L6.1 13.5 1.2 12c-1.1-.3-1.1-1 .2-1.6L20.5 3c.9-.3 1.7.2 1.4 1.2Z"/></svg>'
   };
 
   /* ---------- Каталог ---------- */
@@ -229,14 +228,11 @@
       item.append(card);
       box.append(item);
     });
-    // Кнопка под отзывами ведёт в Instagram, где актуальные с остальными отзывами
-    $("#reviewsMore").href = SITE.reviewsLink || SITE.instagram;
   }
 
-  // Кнопки «Следите за новыми поступлениями» под каталогом
+  // Кнопка «Следите за новыми поступлениями» под каталогом
   function buildFollow() {
     $("#followTelegram").href = SITE.telegram;
-    $("#followInstagram").href = SITE.instagram;
   }
 
   function buildContacts() {
@@ -244,19 +240,39 @@
     var items = [
       { key: "whatsapp", title: "WhatsApp", sub: "Написать напрямую", href: waLink("Ассаламу алейкум! У меня вопрос по книгам.") },
       { key: "telegram", title: "Чат в Telegram", sub: "Задать вопрос", href: SITE.telegramChat || SITE.telegram },
-      { key: "telegram", title: "Канал в Telegram", sub: "Новинки и поступления", href: SITE.telegram },
-      { key: "instagram", title: "Instagram", sub: "@" + SITE.instagramHandle, href: SITE.instagram }
+      { key: "telegram", title: "Канал в Telegram", sub: "Новинки и поступления", href: SITE.telegram }
     ];
     items.forEach(function (it) {
       var a = el("a", "contact");
       a.href = it.href; a.target = "_blank"; a.rel = "noopener noreferrer";
-      var icon = el("span", "contact__icon"); icon.innerHTML = ICONS[it.key];
+      var icon = el("span", "contact__icon");
+      icon.innerHTML = ICONS[it.key];
       var txt = el("span", "contact__text");
       txt.append(el("span", "contact__title", it.title), el("span", "contact__sub", it.sub));
       var go = el("span", "contact__go"); go.innerHTML = ARROW;   // стрелка справа, как у кнопок сайта
       a.append(icon, txt, go);
       box.append(a);
     });
+  }
+
+  // Кнопки блока «Под заказ»: заявка на книгу, которой нет в наличии
+  function buildCustomOrder() {
+    var box = $("#customActions");
+    var msg = "Ассаламу алейкум! Хочу заказать книгу, которой нет в наличии: ";
+    // Главное действие: кнопка WhatsApp. Telegram: контурная кнопка рядом, как в форме заказа
+    var wa = el("a", "btn btn--gold");
+    wa.href = waLink(msg); wa.target = "_blank"; wa.rel = "noopener noreferrer";
+    var ic = el("span", "btn__icon"); ic.innerHTML = ICONS.whatsapp;
+    ic.firstChild.setAttribute("width", "20"); ic.firstChild.setAttribute("height", "20");
+    wa.append(ic, "Написать в WhatsApp");
+
+    var tg = el("a", "btn btn--ghost");
+    tg.href = SITE.telegramChat || SITE.telegram; tg.target = "_blank"; tg.rel = "noopener noreferrer";
+    var tic = el("span", "btn__icon"); tic.innerHTML = ICONS.telegram;
+    tic.firstChild.setAttribute("width", "20"); tic.firstChild.setAttribute("height", "20");
+    tg.append(tic, "Написать в Telegram");
+
+    box.append(wa, tg);
   }
 
   /* ---------- Drawer ---------- */
@@ -370,16 +386,50 @@
     return lines.join("\n");
   }
 
+  // Копируем текст заказа сразу, через выделение: асинхронный буфер обмена может не успеть до того,
+  // как откроется вкладка с чатом и страница потеряет фокус
+  function copyText(text, back) {
+    var ta = el("textarea");
+    ta.value = text; ta.readOnly = true;
+    ta.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px";
+    drawer.append(ta);
+    ta.select(); ta.setSelectionRange(0, text.length);
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (err) { /* ниже пробуем буфер обмена браузера */ }
+    ta.remove();
+    if (back) back.focus();   // фокус остаётся в корзине, на нажатой кнопке
+    if (!ok && navigator.clipboard) { navigator.clipboard.writeText(text).catch(function () {}); ok = true; }
+    return ok;
+  }
+
+  // window.open с "noopener" всегда возвращает null, поэтому отвязываем вкладку сами.
+  // Ссылка открывается в этой же вкладке, только если браузер не дал открыть новую
+  function openChat(url) {
+    var w = window.open(url, "_blank");
+    if (w) w.opener = null; else window.location.href = url;
+  }
+
+  // Telegram подставляет текст из ?text= в личный чат или группу, но не всегда: на этот случай заказ ещё и копируется
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var status = $("#formStatus");
+    var via = (e.submitter && e.submitter.dataset.via) || "whatsapp";
     status.textContent = "";
+    status.classList.remove("is-ok");
     if (!totalCount()) { status.textContent = "Корзина пуста"; return; }
     if (!validate()) return;
-    if (!waConfigured()) { status.textContent = "Номер WhatsApp магазина ещё не указан. Напишите нам в Telegram или Instagram."; return; }
-    var url = waLink(buildMessage());
-    var w = window.open(url, "_blank", "noopener");
-    if (!w) window.location.href = url;
+    var text = buildMessage();
+    if (via === "whatsapp") {
+      if (!waConfigured()) { status.textContent = "Номер WhatsApp магазина ещё не указан. Отправьте заказ в Telegram."; return; }
+      openChat(waLink(text));
+      return;
+    }
+    var copied = copyText(text, e.submitter);
+    openChat((SITE.telegramChat || SITE.telegram) + "?text=" + encodeURIComponent(text));
+    status.classList.add("is-ok");
+    status.textContent = copied
+      ? "Текст заказа скопирован. Если в Telegram он не появился сам, вставьте его в сообщение и отправьте."
+      : "Не получилось скопировать текст заказа. Напишите в Telegram книги, имя, телефон, город и адрес.";
   });
   ["name", "phone", "city", "address"].forEach(function (k) {
     form.elements[k].addEventListener("input", function () { setErr(k, ""); });
@@ -447,6 +497,9 @@
     nodes.forEach(function (n) { io.observe(n); });
   }
 
+  // Как попасть в раздел. По умолчанию плавная прокрутка; initTransitions подменяет её переходом со слоем
+  var navigate = function (y) { window.scrollTo({ top: y, behavior: "smooth" }); };
+
   function initParallax() {
     var hero = $(".hero"), wide = window.matchMedia("(min-width: 900px)");
     var heroH = 1, last = "", queued = false;
@@ -481,7 +534,7 @@
     function frame() {
       queued = false;
       var y = window.scrollY;
-      for (var i = 0; i < items.length - 1; i++) {
+      for (var i = 1; i < items.length - 1; i++) {   // первый экран не уменьшается: второй лист просто наезжает на него
         var at = tops[i + 1] - y;   // где сейчас на экране верх следующей секции
         var c = Math.min(Math.max((starts[i] - at) / Math.max(starts[i] - headH, 1), 0), 1).toFixed(3);
         if (c !== covers[i]) { items[i].style.setProperty("--cover", c); covers[i] = c; }
@@ -497,7 +550,7 @@
         tops[i] = y;
         y += h;
         sticks[i] = Math.min(headH, vh - h);
-        s.style.top = sticks[i] + "px";
+        if (i > 0) s.style.top = sticks[i] + "px";
         // Видимая часть остановившегося листа: от точки у шапки до его низа. К этой точке лист уменьшается,
         // по этой части идёт затемнение с размытием
         var seen = Math.max(0, h - (vh - headH));
@@ -522,7 +575,7 @@
       e.preventDefault();
       var y = i < 0 ? 0 : tops[i] + (target === items[i] ? 0 : target.offsetTop) - headH;
       if (i >= 0 && i < items.length - 1) y = Math.min(y, tops[i] - sticks[i]);
-      window.scrollTo({ top: Math.max(y, 0), behavior: "smooth" });
+      navigate(Math.max(y, 0), target, e);
       history.pushState(null, "", a.getAttribute("href"));
     });
 
@@ -541,15 +594,114 @@
     measure();
   }
 
+  // Переходы между разделами (style.css, «Переходы между разделами»). Слой закрывает экран, страница под ним
+  // перескакивает на нужное место, слой уходит. Приём выбирается по месту назначения:
+  // «О нас», «Под заказ», «Отзывы»: лист с названием; контакты и «наверх»: дыхание. Каталог без слоя: плавная прокрутка.
+  // Слой пускаем по ссылке из меню и кнопкам-ссылкам. Без поддержки масок или @property остаётся плавная прокрутка
+  function initTransitions() {
+    var ok = window.CSS && CSS.supports && "animate" in Element.prototype && "registerProperty" in CSS &&
+      (CSS.supports("mask-composite", "exclude") || CSS.supports("-webkit-mask-composite", "xor"));
+    if (!ok) return;
+
+    var IN_OUT = "cubic-bezier(.7, 0, .2, 1)", OUT = "cubic-bezier(.22, 1, .36, 1)";   // OUT: то же торможение, что у появления при прокрутке
+
+    var root = el("div", "vt"), shape = el("div", "vt__shape"), title = el("div", "vt__title");
+    var word = el("span", "vt__word"), orn = el("img", "vt__orn");
+    orn.src = "img/divider.png"; orn.alt = ""; orn.width = 2040; orn.height = 180;
+    title.append(word, orn);
+    root.append(shape, title);
+    root.hidden = true;
+    root.setAttribute("aria-hidden", "true");
+    document.body.appendChild(root);
+    // Пока слой на экране, страницу под ним не листаем: место назначения уже посчитано
+    ["wheel", "touchmove"].forEach(function (t) { root.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false }); });
+
+    var busy = false;
+    var play = function (node, frames, ms, ease, delay) {
+      return node.animate(frames, { duration: ms, easing: ease || OUT, delay: delay || 0, fill: "both" }).finished;
+    };
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var sweep = function (from, to, ms, ease) {
+      return play(word, [{ backgroundPosition: from + "% 0" }, { backgroundPosition: to + "% 0" }], ms, ease);
+    };
+    var fade = function (from, to, ms, delay) { return play(orn, [{ opacity: from }, { opacity: to }], ms, OUT, delay); };
+    function jump(y) {
+      // В CSS у страницы плавная прокрутка, а тут нужен мгновенный прыжок под слоем
+      window.scrollTo({ top: y, left: 0, behavior: "instant" });
+    }
+    function origin(x, y) { root.style.setProperty("--ox", x + "px"); root.style.setProperty("--oy", y + "px"); }
+
+    function sheet(y) {
+      return play(shape, [{ transform: "translateY(105%)" }, { transform: "translateY(0)" }], 400, IN_OUT).then(function () {
+        jump(y);
+        title.hidden = false;
+        return Promise.all([sweep(100, 50, 260, OUT), fade(0, 1, 260, 60)]);
+      }).then(function () { return wait(50); }).then(function () {
+        return Promise.all([
+          play(shape, [{ transform: "translateY(0)" }, { transform: "translateY(-105%)" }], 500, IN_OUT),
+          play(title, [{ transform: "translateY(0)", opacity: 1 }, { transform: "translateY(-26vh)", opacity: 0 }], 470, IN_OUT),
+          sweep(50, 0, 300, IN_OUT)
+        ]);
+      });
+    }
+
+    function breath(o, y, arrive) {
+      var blur = function (px) { return { backdropFilter: "blur(" + px + "px)", webkitBackdropFilter: "blur(" + px + "px)" }; };
+      origin(o.x, o.y);
+      return play(shape, [Object.assign({ opacity: 0 }, blur(0)), Object.assign({ opacity: 1 }, blur(16))], 320, OUT).then(function () {
+        jump(y);
+        var back = [play(shape, [Object.assign({ opacity: 1 }, blur(16)), Object.assign({ opacity: 0 }, blur(0))], 760, OUT, 60)];
+        // Раздел проступает из размытия: чуть ниже своего места и чуть крупнее
+        if (arrive) back.push(play(arrive, [{ opacity: 0, filter: "blur(10px)", transform: "translateY(26px) scale(1.02)" }, { opacity: 1, filter: "blur(0px)", transform: "translateY(0) scale(1)" }], 900, OUT, 60));
+        return Promise.all(back);
+      });
+    }
+
+    function run(y, target, e) {
+      var id = target.id, hero = target === header || id === "top";
+      var mode = (hero || id === "contacts") ? "breath" : "sheet";
+      var surface = target.closest(".section, .hero");
+      var tone = surface && surface.classList.contains("section--alt") ? "parch" : "wine";
+      var heading = target.querySelector(".section__title");
+      var arrive = hero ? $(".hero__inner") : target.querySelector(".container");
+      // Точка нажатия; с клавиатуры (координат нет) центр самой ссылки
+      var r = e.target.closest("a").getBoundingClientRect();
+      var o = !e.clientX && !e.clientY ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : { x: e.clientX, y: e.clientY };
+
+      busy = true;
+      word.textContent = heading ? heading.textContent : "";
+      root.className = "vt vt--" + mode + (tone === "wine" ? "" : " vt--" + tone);
+      title.hidden = mode === "breath";
+      orn.hidden = false;
+      root.hidden = false;
+      var go = mode === "sheet" ? sheet(y) : breath(o, y, arrive);
+      var done = function () {
+        [root, shape, title, word, orn, arrive].forEach(function (n) { if (n) n.getAnimations().forEach(function (a) { a.cancel(); }); });
+        root.hidden = true;
+        root.className = "vt";
+        busy = false;
+      };
+      go.then(done, done);
+    }
+
+    navigate = function (y, target, e) {
+      if (busy) return;
+      // Каталог без заставки: обычная плавная прокрутка. Раздел уже перед глазами: тоже достаточно плавно подъехать
+      if (target.id === "catalog" || Math.abs(y - window.scrollY) < 80) { window.scrollTo({ top: y, behavior: "smooth" }); return; }
+      run(y, target, e);
+    };
+  }
+
   /* ---------- Старт ---------- */
   $("#year").textContent = new Date().getFullYear();
   buildCatalog();
   buildReviews();
   buildFollow();
   buildContacts();
+  buildCustomOrder();
   render();
   initHeader();
   initMenu();
   initReveal();
-  if (!reduceMotion) { initParallax(); initStack(); }
+  if (!reduceMotion) { initParallax(); initStack(); initTransitions(); }
 })();

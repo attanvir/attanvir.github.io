@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Ат-Танвир — концепт C «Сначала полка»</title>
+<link rel="stylesheet" href="base.css">
+<style>
+:root{--wine:#4a0410;--deep:#26020a;--bg:#faf6ee;--cell:#fffdf8;--plate:#efe6d3;--ink:#2b0b10;--soft:#664638;--line:#e2d5bd;--serif:"Cormorant Garamond",Georgia,serif;--sans:"Manrope",system-ui,sans-serif;--label:"Montserrat",system-ui,sans-serif}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans)}
+.wrap{max-width:1320px;margin:0 auto;padding:0 32px}
+.top{background:var(--wine);color:#f1e4cd}
+.top__in{display:flex;align-items:center;gap:32px;height:72px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:54px}
+.brand b{font:600 28px/1 var(--serif);letter-spacing:.02em}
+.search{flex:1;max-width:520px;margin:0 auto;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);border:1px solid rgba(240,230,212,.35);border-radius:4px;padding:11px 16px;font-size:14px;color:#dccdb4}
+.cart{border:1px solid rgba(240,230,212,.6);background:none;border-radius:4px;padding:11px 18px;font:600 14px/1 var(--sans);color:#f1e4cd}
+.cart i{font-style:normal;margin-left:8px;background:#f0e6d4;color:var(--wine);border-radius:3px;padding:2px 7px}
+.nav{background:var(--wine);border-top:1px solid rgba(240,230,212,.18)}
+.nav__in{display:flex;gap:30px;overflow-x:auto;white-space:nowrap}
+.nav a{font:600 14px/1 var(--sans);text-decoration:none;color:#f1e4cd;padding:16px 0;border-bottom:3px solid transparent;opacity:.88}
+.nav a:hover,.nav a[aria-current]{opacity:1;border-color:#f0e6d4}
+.nav a.right{margin-left:auto}
+/* полоса вместо первого экрана */
+.strip{border-bottom:1px solid var(--line);background:var(--cell)}
+.strip__in{display:flex;justify-content:space-between;align-items:center;gap:12px 32px;padding:14px 32px;flex-wrap:wrap}
+.strip h1{font:600 clamp(24px,2.4vw,30px)/1.1 var(--serif);color:var(--wine)}
+.trust{display:flex;gap:6px 24px;flex-wrap:wrap;font-size:13px;color:var(--soft)}
+.trust b{color:var(--ink);font-weight:700}
+/* панель каталога */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding:16px 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--cell);border:1px solid var(--line);border-radius:4px;padding:10px 16px;font:600 14px/1 var(--sans);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--wine);color:#f6e4b8;border-color:var(--wine)}
+.sort{display:flex;gap:16px;align-items:center;font-size:14px;color:var(--soft)}
+.sort span.sel{border:1px solid var(--line);background:var(--cell);border-radius:4px;padding:10px 14px;color:var(--ink)}
+/* сетка с линиями вместо рамок */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.card{display:flex;flex-direction:column;background:var(--cell);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px}
+.note{background:var(--plate);border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px;display:flex;flex-direction:column;justify-content:flex-end;gap:10px}
+.note h3{font:600 24px/1.15 var(--serif);color:var(--wine)}
+.note p{font-size:14px;color:var(--soft)}
+.note a{font:700 14px/1 var(--sans);color:var(--wine);text-underline-offset:4px}
+.card[hidden]{display:none}
+.card__img{display:block;background:var(--plate)}
+.card__img img{width:100%;aspect-ratio:3/4;object-fit:cover}
+.card__body{display:flex;flex-direction:column;flex:1;padding-top:18px}
+.card__title{font:600 24px/1.15 var(--serif);color:var(--wine);margin-bottom:8px}
+.card__author{font-size:14px;line-height:1.45}
+.card__by{font-size:13px;line-height:1.45;color:var(--soft);margin-top:2px}
+.card__buy{margin-top:auto;padding-top:18px}
+.card__price{display:block;font:600 26px/1 var(--serif);color:var(--wine);margin-bottom:12px}
+.card__add{width:100%;background:var(--wine);color:#f6e4b8;border:0;border-radius:4px;padding:14px 18px;font:700 14px/1 var(--sans)}
+/* подборка-полка */
+.sec{padding-block:64px 0}
+.sec__head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px;gap:16px}
+.sec__head h2{font:600 clamp(30px,3.4vw,42px)/1 var(--serif);color:var(--wine)}
+.sec__head a{font:600 14px/1 var(--sans);color:var(--wine);text-underline-offset:4px}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.row .tile{display:block;text-decoration:none}
+.row .tile img{width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--plate)}
+.row .tile b{display:block;font:600 18px/1.2 var(--serif);color:var(--wine);margin-top:10px}
+.row .tile span{font-size:13px;color:var(--soft)}
+/* о нас, шаги */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--line);background:var(--cell)}
+.facts div{padding:24px;border-right:1px solid var(--line)}
+.facts div:last-child{border:0}
+.facts h3{font:700 15px/1.3 var(--sans);color:var(--wine);margin-bottom:6px}
+.facts p{font-size:14px;color:var(--soft)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.steps li{background:var(--cell);border:1px solid var(--line);padding:22px}
+.steps b{font:600 36px/1 var(--serif);color:var(--wine);display:block;margin-bottom:8px}
+.steps h3{font:700 15px/1.3 var(--sans);margin-bottom:4px}
+.steps p{font-size:14px;color:var(--soft)}
+.revs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.revs blockquote{background:var(--cell);border:1px solid var(--line);padding:22px;font:500 19px/1.45 var(--serif)}
+.revs cite{display:block;margin-top:12px;font:600 11px/1 var(--label);letter-spacing:.12em;text-transform:uppercase;color:var(--soft);font-style:normal}
+.ftr{background:var(--wine);color:#d8c8ae;margin-top:80px;padding:48px 0 32px}
+.ftr__in{display:grid;grid-template-columns:4fr 3fr 3fr 3fr;gap:40px}
+.ftr h3{font:600 12px/1 var(--label);letter-spacing:.14em;text-transform:uppercase;color:#f1e4cd;margin-bottom:14px}
+.ftr li{margin-bottom:8px}
+.ftr small{display:block;margin-top:36px;padding-top:18px;border-top:1px solid rgba(240,230,212,.2);font-size:13px}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}.row{grid-template-columns:repeat(2,1fr)}.facts,.steps{grid-template-columns:repeat(2,1fr)}.facts div:nth-child(2){border-right:0}.facts div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media(max-width:700px){
+  .wrap{padding:0 16px}.strip__in{padding:18px 16px}
+  .top__in{height:60px;gap:12px}.brand img{width:44px}.brand b{font-size:24px}.search{display:none}.cart{margin-left:auto}
+  .nav__in{gap:22px}
+  .bar{padding:18px 0}.sort{display:none}
+  .grid{grid-template-columns:1fr}
+  .card{display:grid;grid-template-columns:104px 1fr;gap:16px;padding:16px}
+  .note{padding:16px}
+  .card__img{align-self:start}
+  .trust{gap:4px 16px;font-size:13px}.strip__in{gap:10px}
+  .card__body{padding-top:0}.card__title{font-size:20px}.card__buy{padding-top:12px}
+  .card__price{font-size:22px;margin-bottom:8px}.card__add{padding:12px}
+  .row{grid-template-columns:repeat(2,1fr)}
+  .facts,.steps,.revs{grid-template-columns:1fr}
+  .facts div{border-right:0;border-bottom:1px solid var(--line)}
+  .ftr__in{grid-template-columns:1fr}
+  .sec{padding-top:48px}
+}
+</style>
+</head>
+<body>
+<div class="concept-tag"><span>КОНЦЕПТ C · «Сначала полка» · макет, кнопки и поиск не работают</span><a href="index.html">← к сравнению трёх концепций</a></div>
+<header>
+  <div class="top"><div class="wrap top__in">
+    <a class="brand" href="#"><img src="../site/img/calligraphy.png" alt="" width="54" height="38"><b>Ат-Танвир</b></a>
+    <div class="search" role="search" aria-label="Поиск (макет)"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM20 20l-4-4"/></svg>Поиск по названию, автору</div>
+    <button type="button" class="cart">Корзина<i>0</i></button>
+  </div></div>
+  <div class="nav"><nav class="wrap nav__in" aria-label="Разделы"><a href="#catalog" aria-current="true">Все книги</a><a href="#catalog">Акыда</a><a href="#catalog">Для сестёр</a><a href="#catalog">Хадисы</a><a href="#about">О нас</a><a href="#how">Как заказать</a><a class="right" href="#contacts">Контакты</a></nav></div>
+</header>
+
+<main>
+<section class="strip"><div class="wrap strip__in">
+  <h1>Книжный магазин исламской литературы</h1>
+  <p class="trust"><span><b>Своя печать</b> и редкие издания</span><span><b>Доставка</b> Почтой России и Ozon</span><span><b>Отвечаем</b> в WhatsApp и Telegram</span></p>
+</div></section>
+
+<section class="wrap" id="catalog">
+  <div class="bar">
+    <div class="chips" role="group" aria-label="Разделы каталога">
+      <button type="button" class="chip" data-filter="all" aria-pressed="true">Все книги</button>
+      <button type="button" class="chip" data-filter="akyda" aria-pressed="false">Акыда</button>
+      <button type="button" class="chip" data-filter="sisters" aria-pressed="false">Для сестёр</button>
+      <button type="button" class="chip" data-filter="hadith" aria-pressed="false">Хадисы</button>
+    </div>
+    <div class="sort"><span>Показано: <b id="shown">6</b> из 6</span><span class="sel">Сначала дешёвые ▾</span></div>
+  </div>
+  <div class="grid">
+<article class="card" data-cats="akyda">
+  <a class="card__img" href="#" aria-label="Разъяснение трёх основ" tabindex="-1"><img src="../site/img/books/tri-osnovy.jpg" alt="Обложка книги «Разъяснение трёх основ»" width="720" height="960"></a>
+  <div class="card__body">
+    <h3 class="card__title">Разъяснение трёх основ</h3>
+    <p class="card__author">Имам Мухаммад ибн Абдуль-Ваххаб</p>
+    <p class="card__by">Разъяснение: Али ибн Худейр аль-Худейр</p>
+    <div class="card__buy"><span class="card__price">1 850 ₽</span><button type="button" class="card__add">В корзину</button></div>
+  </div>
+</article>
+<article class="card" data-cats="sisters">
+  <a class="card__img" href="#" aria-label="Мусульманки и университетское образование" tabindex="-1"><img src="../site/img/books/musulmanki.jpg" alt="Обложка книги «Мусульманки и университетское образование»" width="720" height="960"></a>
+  <div class="card__body">
+    <h3 class="card__title">Мусульманки и университетское образование</h3>
+    <p class="card__author">Шейх Ахмад Муса Джибриль</p>
+    
+    <div class="card__buy"><span class="card__price">1 850 ₽</span><button type="button" class="card__add">В корзину</button></div>
+  </div>
+</article>
+<article class="card" data-cats="akyda">
+  <a class="card__img" href="#" aria-label="Разъяснение пунктов, аннулирующих Ислам" tabindex="-1"><img src="../site/img/books/aknulirovanie.jpg" alt="Обложка книги «Разъяснение пунктов, аннулирующих Ислам»" width="720" height="960"></a>
+  <div class="card__body">
+    <h3 class="card__title">Разъяснение пунктов, аннулирующих Ислам</h3>
+    <p class="card__author">Сулейман Наср бин Абдуллах аль-Ульван</p>
+    
+    <div class="card__buy"><span class="card__price">700 ₽</span><button type="button" class="card__add">В корзину</button></div>
+  </div>
+</article>
+<article class="card" data-cats="akyda">
+  <a class="card__img" href="#" aria-label="Аль-Акыда аль-Васитыя" tabindex="-1"><img src="../site/img/books/vasitiya.jpg" alt="Обложка книги «Аль-Акыда аль-Васитыя»" width="720" height="960"></a>
+  <div class="card__body">
+    <h3 class="card__title">Аль-Акыда аль-Васитыя</h3>
+    <p class="card__author">Шейх Такиюддин Ахмад ибн Абдуль-Халим ибн Таймия</p>
+    
+    <div class="card__buy"><span class="card__price">2 200 ₽</span><button type="button" class="card__add">В корзину</button></div>
+  </div>
+</article>
+<article class="card" data-cats="akyda">
+  <a class="card__img" href="#" aria-label="Послание, дополняющее и разъясняющее слова имамов недждийского призыва" tabindex="-1"><img src="../site/img/books/poslanie.jpg" alt="Обложка книги «Послание, дополняющее и разъясняющее слова имамов недждийского призыва»" width="720" height="960"></a>
+  <div class="card__body">
+    <h3 class="card__title">Послание, дополняющее и разъясняющее слова имамов недждийского призыва</h3>
+    <p class="card__author">Шейх Али ибн Худейр аль-Худейр</p>
+    
+    <div class="card__buy"><span class="card__price">990 ₽</span><button type="button" class="card__add">В корзину</button></div>
+  </div>
+</article>
+<article class="card" data-cats="sisters hadith">
+  <a class="card__img" href="#" aria-label="40 хадисов про женщин" tabindex="-1"><img src="../site/img/books/40-hadisov.jpg" alt="Обложка книги «40 хадисов про женщин»" width="720" height="960"></a>
+  <div class="card__body">
+    <h3 class="card__title">40 хадисов про женщин</h3>
+    <p class="card__author">Д-р Ибрахим Рафикъ ат-Тауиль</p>
+    
+    <div class="card__buy"><span class="card__price">2 000 ₽</span><button type="button" class="card__add">В корзину</button></div>
+  </div>
+</article>
+    <div class="note"><h3>Нужной книги нет в наличии?</h3><p>Ищем то, чего нет в обычной продаже, и привозим под заказ.</p></div>
+    <div class="note"><h3>Новые поступления</h3><p>Следите за ними в нашем Telegram-канале.</p><a href="https://t.me/prosveshcheniye76" rel="noopener noreferrer">Открыть канал →</a></div>
+  </div>
+</section>
+
+<section class="wrap sec">
+  <div class="sec__head"><h2>Подборка: акыда</h2><a href="#catalog">Все 4 книги</a></div>
+  <div class="row"><a class="tile" href="#"><img src="../site/img/books/tri-osnovy.jpg" alt="Обложка книги «Разъяснение трёх основ»" width="720" height="960"><b>Разъяснение трёх основ</b><span>1 850 ₽</span></a><a class="tile" href="#"><img src="../site/img/books/aknulirovanie.jpg" alt="Обложка книги «Разъяснение пунктов, аннулирующих Ислам»" width="720" height="960"><b>Разъяснение пунктов, аннулирующих Ислам</b><span>700 ₽</span></a><a class="tile" href="#"><img src="../site/img/books/vasitiya.jpg" alt="Обложка книги «Аль-Акыда аль-Васитыя»" width="720" height="960"><b>Аль-Акыда аль-Васитыя</b><span>2 200 ₽</span></a><a class="tile" href="#"><img src="../site/img/books/poslanie.jpg" alt="Обложка книги «Послание, дополняющее и разъясняющее слова имамов недждийского призыва»" width="720" height="960"><b>Послание, дополняющее и разъясняющее слова има…</b><span>990 ₽</span></a></div>
+</section>
+
+<section class="wrap sec" id="about">
+  <div class="sec__head"><h2>Почему «Ат-Танвир»</h2></div>
+  <div class="facts"><div><h3>Своя печать</h3><p>Мы печатаем книги сами, поэтому у нас есть издания, которые трудно найти в других магазинах.</p></div><div><h3>Редкие книги</h3><p>Ищем то, чего нет в обычной продаже. Если нужной книги нет в наличии, привезём её под заказ.</p></div><div><h3>Правильное убеждение</h3><p>Каждая книга опирается на Коран, Сунну и слова учёных.</p></div><div><h3>Забота о читателе</h3><p>Бережно упаковываем и отправляем Почтой России или через Ozon, на вопросы отвечаем сами в WhatsApp и Telegram.</p></div></div>
+</section>
+
+<section class="wrap sec" id="how">
+  <div class="sec__head"><h2>Как заказать</h2></div>
+  <ol class="steps"><li><b>1</b><h3>Соберите корзину</h3><p>Добавьте книги из каталога и укажите количество.</p></li><li><b>2</b><h3>Заполните данные</h3><p>Имя, телефон, город и адрес. Выберите Почту России или Ozon.</p></li><li><b>3</b><h3>Отправьте заказ</h3><p>В WhatsApp или Telegram. Сообщение с заказом составится само.</p></li><li><b>4</b><h3>Получите книги</h3><p>Подтвердим заказ и доставку, бережно упакуем и отправим.</p></li></ol>
+</section>
+
+<section class="wrap sec" id="reviews">
+  <div class="sec__head"><h2>Отзывы покупателей</h2></div>
+  <div class="revs"><blockquote>Забрала заказ, всё идеально, очень довольна. Отдельное «джазакуллаху хайран» за упаковку, что так бережно относитесь к заказам. Пусть Аллах приумножит ваш ризк.<cite>Отзыв покупателя</cite></blockquote><blockquote>Ассаламу алейкум. Книгу забрала, доехала в идеальном состоянии, всё было очень хорошо упаковано. Ин ша Аллах, в дальнейшем буду заказывать книги только у вас. Желаю вам продвижения и бараката в деле.<cite>Отзыв покупателя</cite></blockquote><blockquote>Ассаламу алейкум ва рахматуЛлахи ва баракатух. Всё дошло целое. Аллахумма барик. Пусть Аллах увеличит ваш ризк. Очень ждала эту книгу.<cite>Отзыв покупателя</cite></blockquote></div>
+</section>
+</main>
+
+<footer class="ftr" id="contacts"><div class="wrap">
+  <div class="ftr__in">
+    <div><a class="brand" href="#" style="color:#f1e4cd"><img src="../site/img/calligraphy.png" alt="" width="54" height="38"><b>Ат-Танвир</b></a><p style="margin-top:14px;max-width:32ch">Книжный магазин исламской литературы.</p></div>
+    <div><h3>Каталог</h3><ul><li>Акыда</li><li>Для сестёр</li><li>Хадисы</li></ul></div>
+    <div><h3>Покупателю</h3><ul><li>Как заказать</li><li>Доставка: Почта России, Ozon</li><li>Отзывы</li></ul></div>
+    <div><h3>Связь</h3><ul><li>WhatsApp: номер будет указан</li><li>Telegram-чат: ссылка будет указана</li><li><a href="https://t.me/prosveshcheniye76" rel="noopener noreferrer" style="color:#f1e4cd">Канал в Telegram</a></li></ul></div>
+  </div>
+  <small>© 2026 Ат-Танвир. Книжный магазин</small>
+</div></footer>
+<script>
+document.querySelectorAll('[data-filter]').forEach(function(btn){btn.addEventListener('click',function(){
+  var f=btn.dataset.filter;
+  document.querySelectorAll('[data-filter]').forEach(function(b){b.setAttribute('aria-pressed',String(b===btn))});
+  document.querySelectorAll('[data-cats]').forEach(function(c){c.hidden=!(f==='all'||c.dataset.cats.split(' ').indexOf(f)>-1)});
+  var n=document.querySelectorAll('[data-cats]:not([hidden])').length;var el=document.getElementById('shown');if(el)el.textContent=n;
+});});
+</script>
+</body></html>

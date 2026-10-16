@@ -4,9 +4,6 @@
 
   SITE — контакты. Номер WhatsApp пишите только цифрами, без «+» и пробелов:
   например 79281234567.
-  reviewsLink — куда ведёт кнопка «Смотреть все отзывы в Instagram» под отзывами. Сейчас это профиль,
-  там вверху актуальные с отзывами. Можно вставить прямую ссылку на актуальное:
-  откройте его в Instagram, нажмите «…» → «Копировать ссылку» и вставьте сюда.
 
   BOOKS — каталог:
     id        — уникальный латинский код книги
@@ -28,9 +25,6 @@ window.SITE = {
   whatsapp: "70000000000", // TODO: номер магазина, только цифры
   telegram: "https://t.me/prosveshcheniye76", // канал
   telegramChat: "", // TODO: ссылка на чат в Telegram, например https://t.me/имя. Пока пусто, кнопка «Чат» ведёт в канал
-  instagram: "https://www.instagram.com/at.tanvir4/",
-  instagramHandle: "at.tanvir4",
-  reviewsLink: "https://www.instagram.com/at.tanvir4/",
 };
 
 window.BOOKS = [
