@@ -9,7 +9,7 @@
     id        — уникальный латинский код книги
     title     — название
     author    — автор
-    price     — цена в рублях (число)
+    price     — цена в рублях (число). Пока цены нет, пишите null: на сайте будет «Цена уточняется»
     image     — путь к обложке
     note      — короткое описание под автором, до двух строк (можно оставить "")
     preorder  — true, если книга «под заказ» (отметка для вас, на сайте не показывается)
@@ -28,6 +28,34 @@ window.SITE = {
 };
 
 window.BOOKS = [
+  {
+    id: "vala-val-bara",
+    title: "Решительное слово",
+    author: "Шейх Абу Хафс аш-Шами",
+    price: 2500,
+    image: "img/books/vala-val-bara.jpg",
+    note: "О факторах, аннулирующих Ислам. Дружба и непричастность",
+    inStock: true,
+  },
+  {
+    id: "tiryak",
+    title: "Лекарство в вопросах вероубеждения",
+    author: "Шейх Абу Умар аль-Джазрави",
+    price: 2200,
+    image: "img/books/tiryak.jpg",
+    note: "Ат-Тирьяк фи масаиль аль-итикад. Перевод: Ат-Тадаррудж",
+    inStock: true,
+  },
+  {
+    id: "koran",
+    title: "Священный Коран",
+    author: "Мусхаф на арабском языке",
+    price: null,
+    image: "img/books/koran.jpg",
+    images: ["img/books/koran.jpg", "img/books/koran-2.jpg", "img/books/koran-3.jpg", "img/books/koran-chernyj.jpg"],
+    note: "В кожаной обложке: коричневая или чёрная",
+    inStock: true,
+  },
   {
     id: "tri-osnovy",
     title: "Разъяснение трёх основ",

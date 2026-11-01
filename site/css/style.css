@@ -510,6 +510,7 @@ button { font: inherit; }
    В узкой карточке кнопка уходит под цену */
 .book__buy { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line-faint); display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .price { font-family: var(--font-serif); font-weight: 700; font-size: 27px; line-height: 1; color: var(--gold-light); font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+.price.price--ask { font-size: 20px; line-height: 1.1; white-space: normal; }   /* «Цена уточняется», когда в books.js price: null */
 .book__slot { flex: none; width: 138px; }
 @container (max-width: 224px) {
   .book__buy { flex-direction: column; align-items: stretch; gap: 12px; }

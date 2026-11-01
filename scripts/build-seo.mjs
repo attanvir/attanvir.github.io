@@ -22,6 +22,8 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 // Внутри <script type="application/ld+json"> нельзя оставлять «</», иначе текст закроет тег
 const jsonLd = (obj) => JSON.stringify(obj, null, 2).replace(/</g, "\\u003c");
 const rub = (n) => n.toLocaleString("ru-RU").replace(/\s/g, " ") + " ₽";
+// price: null в books.js — цены пока нет
+const priceText = (b) => (b.price ? rub(b.price) : "Цена уточняется");
 const cover = (b) => (b.images && b.images.length ? b.images[0] : b.image);
 const bookUrl = (b) => `${BASE}books/${b.id}.html`;
 const waLink = (text) => `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;
@@ -38,7 +40,7 @@ const catalogCard = (b) => `
               <p class="book__author">${esc(b.author)}</p>
               ${b.note ? `<p class="book__note">${esc(b.note)}</p>` : ""}
             </div>
-            <div class="book__buy"><div class="price">${rub(b.price)}</div></div>
+            <div class="book__buy"><div class="${b.price ? "price" : "price price--ask"}">${priceText(b)}</div></div>
           </div>
         </article>`;
 
@@ -46,7 +48,7 @@ const catalogCard = (b) => `
 const bookPage = (b) => {
   const photos = b.images && b.images.length ? b.images : [b.image];
   const title = `${b.title} — ${shortAuthor(b)} | Ат-Танвир`;
-  const description = `${b.title}. Автор: ${b.author}. Книжный магазин «Ат-Танвир»: ${rub(b.price)}. Доставка Почтой России и Ozon.`;
+  const description = `${b.title}. Автор: ${b.author}. Книжный магазин «Ат-Танвир»: ${b.price ? rub(b.price) : "цена по запросу"}. Доставка Почтой России и Ozon.`;
   const url = bookUrl(b);
   const ld = {
     "@context": "https://schema.org",
@@ -58,8 +60,7 @@ const bookPage = (b) => {
     url,
     offers: {
       "@type": "Offer",
-      price: b.price,
-      priceCurrency: "RUB",
+      ...(b.price ? { price: b.price, priceCurrency: "RUB" } : {}),
       availability: b.inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       seller: { "@type": "Organization", name: SITE.name, url: BASE },
     },
@@ -116,7 +117,7 @@ ${jsonLd(ld)}
       <h1 class="book-page__title">${esc(b.title)}</h1>
       <p class="book__author">${esc(b.author)}</p>
       ${b.note ? `<p class="book__note">${esc(b.note)}</p>` : ""}
-      <p class="price book-page__price">${rub(b.price)}</p>
+      <p class="price book-page__price${b.price ? "" : " price--ask"}">${priceText(b)}</p>
       ${b.inStock ? "" : `<p class="book__note">Сейчас нет в наличии. Напишите нам, привезём под заказ.</p>`}
 
       <div class="book-page__actions">

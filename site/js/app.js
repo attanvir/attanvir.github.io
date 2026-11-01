@@ -9,6 +9,8 @@
 
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
   var rub = function (n) { return n.toLocaleString("ru-RU").replace(/ /g, " ") + " ₽"; };
+  // У книги может не быть цены (price: null в books.js): тогда пишем «Цена уточняется»
+  var priceText = function (b, q) { return b.price ? rub(b.price * (q || 1)) : "Цена уточняется"; };
   var byId = {};
   BOOKS.forEach(function (b) { byId[b.id] = b; });
 
@@ -41,7 +43,10 @@
     return Object.keys(cart).reduce(function (s, id) { return s + cart[id]; }, 0);
   }
   function totalSum() {
-    return Object.keys(cart).reduce(function (s, id) { return s + cart[id] * byId[id].price; }, 0);
+    return Object.keys(cart).reduce(function (s, id) { return s + cart[id] * (byId[id].price || 0); }, 0);
+  }
+  function hasNoPrice() {
+    return Object.keys(cart).some(function (id) { return !byId[id].price; });
   }
 
   /* ---------- Вспомогательные построители ---------- */
@@ -94,7 +99,7 @@
       if (b.note) info.append(el("p", "book__note", b.note));
 
       var buy = el("div", "book__buy");
-      buy.append(el("div", "price", rub(b.price)), el("div", "book__slot"));
+      buy.append(el("div", b.price ? "price" : "price price--ask", priceText(b)), el("div", "book__slot"));
       body.append(info, buy);
 
       card.append(bookMedia(b), body);
@@ -194,7 +199,7 @@
       var info = el("div");
       info.append(el("p", "cart-item__title", b.title));
       var row = el("div", "cart-item__row");
-      row.append(qtyControl(id, "qty--cart"), el("span", "cart-item__sum", rub(b.price * cart[id])));
+      row.append(qtyControl(id, "qty--cart"), el("span", "cart-item__sum", priceText(b, cart[id])));
       var rm = el("button", "remove", "Удалить");
       rm.type = "button"; rm.dataset.act = "del"; rm.dataset.id = id;
       rm.setAttribute("aria-label", "Удалить из корзины: " + b.title);
@@ -204,7 +209,7 @@
     });
     $("#cartEmpty").hidden = ids.length > 0;
     $("#orderForm").hidden = ids.length === 0;
-    $("#cartTotal").textContent = rub(totalSum());
+    $("#cartTotal").textContent = rub(totalSum()) + (hasNoPrice() ? " + уточним" : "");
   }
 
   function renderBadge() {
@@ -376,9 +381,9 @@
     var lines = ["Ассаламу алейкум! Хочу заказать:", ""];
     Object.keys(cart).forEach(function (id, i) {
       var b = byId[id];
-      lines.push((i + 1) + ". " + b.title + " × " + cart[id] + " — " + rub(b.price * cart[id]));
+      lines.push((i + 1) + ". " + b.title + " × " + cart[id] + " — " + (b.price ? rub(b.price * cart[id]) : "цена уточняется"));
     });
-    lines.push("", "Итого за книги: " + rub(totalSum()), "",
+    lines.push("", "Итого за книги: " + rub(totalSum()) + (hasNoPrice() ? " (без книг, у которых цена уточняется)" : ""), "",
       "Имя: " + form.elements.name.value.trim(),
       "Телефон: " + form.elements.phone.value.trim(),
       "Доставка: " + form.elements.delivery.value,
