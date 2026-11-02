@@ -110,9 +110,6 @@
   --buy-text: #f6e4b8;
   --title-shadow: 0 2px 22px rgba(23, 1, 4, .7);
 
-  --wa-1: #1d8048;        /* кнопка WhatsApp: белый текст читается на обоих оттенках */
-  --wa-2: #17673a;
-
   /* Фактура бумаги на пергаменте: мелкий тёплый шум */
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .24 0 0 0 0 .12 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");
 
@@ -213,12 +210,6 @@ button { font: inherit; }
 }
 .btn--ghost { color: var(--gold-light); background: transparent; border-color: var(--line); }
 .btn--ghost:hover { background: rgba(201, 154, 69, .13); border-color: var(--gold); transform: translateY(-2px); }
-.btn--wa {
-  color: #fff; background: linear-gradient(180deg, var(--wa-1), var(--wa-2));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 12px 26px -12px rgba(29, 128, 72, .7);
-}
-.btn--wa:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 18px 32px -12px rgba(29, 128, 72, .9); }
-.btn--wa svg, .btn--wa:hover svg { transform: none; }
 .btn--block { width: 100%; }
 
 /* ---------- Шапка ---------- */
@@ -693,11 +684,6 @@ button { font: inherit; }
   .book-page { grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 56px; }
 }
 .hint--center { text-align: center; margin: 12px 0 0; }
-/* Под кнопкой WhatsApp: «или сделайте заказ» между двумя линиями и контурная кнопка Telegram */
-.order__or { display: flex; align-items: center; gap: 12px; margin: 16px 0 12px; font-size: 14px; color: var(--text-soft); }
-.order__or::before, .order__or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-.order__alt { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-.order__alt .btn { padding: 0 12px; gap: 8px; white-space: nowrap; }   /* на узком телефоне кнопки встают одна под другой */
 
 .field { margin: 0 0 16px; padding: 0; border: 0; min-width: 0; }
 .field label, .field legend { display: block; margin-bottom: 7px; padding: 0; font-weight: 700; font-size: 14px; letter-spacing: .02em; color: var(--text); }

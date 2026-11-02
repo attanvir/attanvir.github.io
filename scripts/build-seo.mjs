@@ -26,7 +26,7 @@ const rub = (n) => n.toLocaleString("ru-RU").replace(/\s/g, " ") + " ₽";
 const priceText = (b) => (b.price ? rub(b.price) : "Цена уточняется");
 const cover = (b) => (b.images && b.images.length ? b.images[0] : b.image);
 const bookUrl = (b) => `${BASE}books/${b.id}.html`;
-const waLink = (text) => `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;
+const tgLink = (text) => `${SITE.telegramChat}?text=${encodeURIComponent(text)}`;
 // Короткое имя автора для заголовка: всё до «. Разъяснение: …»
 const shortAuthor = (b) => b.author.split(". ")[0];
 
@@ -65,7 +65,7 @@ const bookPage = (b) => {
       seller: { "@type": "Organization", name: SITE.name, url: BASE },
     },
   };
-  const waText = b.inStock
+  const tgText = b.inStock
     ? `Здравствуйте! Хочу заказать книгу «${b.title}» (${b.author}).`
     : `Здравствуйте! Хочу узнать о книге «${b.title}» (${b.author}): когда появится или можно ли заказать.`;
 
@@ -121,8 +121,8 @@ ${jsonLd(ld)}
       ${b.inStock ? "" : `<p class="book__note">Сейчас нет в наличии. Напишите нам, привезём под заказ.</p>`}
 
       <div class="book-page__actions">
-        <a class="btn btn--wa" href="${esc(waLink(waText))}" target="_blank" rel="noopener noreferrer">${b.inStock ? "Заказать в WhatsApp" : "Узнать в WhatsApp"}</a>
-        <a class="btn btn--ghost" href="${esc(SITE.telegram)}" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>
+        <a class="btn btn--gold" href="${esc(tgLink(tgText))}" target="_blank" rel="noopener noreferrer">${b.inStock ? "Заказать в Telegram" : "Узнать в Telegram"}</a>
+        <a class="btn btn--ghost" href="${esc(SITE.telegram)}" target="_blank" rel="noopener noreferrer">Telegram-канал</a>
       </div>
       <p class="hint">Доставка Почтой России или через Ozon. Стоимость доставки уточним при заказе.</p>
     </div>

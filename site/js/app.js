@@ -74,7 +74,6 @@
   var CART_PLUS = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M3 4h2.4l2.1 11h9.6l2-8H6.2M9 20a1 1 0 1 0 0 .01M17 20a1 1 0 1 0 0 .01M12.8 9v4M10.8 11h4"/></svg>';
   var ARROW = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 6l6 6-6 6"/></svg>';
   var ICONS = {
-    whatsapp: '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.8 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.8-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1 .9 1.9 1.2 2.2 1.3.3.1.4.1.6-.1l.8-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.7-.1 1.4Z"/></svg>',
     telegram: '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path fill="currentColor" d="M21.9 4.2 18.6 20c-.2 1.1-.9 1.4-1.8.9l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.2L6.1 13.5 1.2 12c-1.1-.3-1.1-1 .2-1.6L20.5 3c.9-.3 1.7.2 1.4 1.2Z"/></svg>'
   };
 
@@ -247,7 +246,7 @@
   function buildContacts() {
     var box = $("#contactsList");
     var items = [
-      { key: "whatsapp", title: "WhatsApp", sub: "Написать напрямую", href: waLink("Ассаламу алейкум! У меня вопрос по книгам.") },
+      { key: "telegram", title: "Telegram", sub: "Заказы и вопросы", href: tgLink("Ассаламу алейкум! У меня вопрос по книгам.") },
       { key: "telegram", title: "Канал в Telegram", sub: "Новинки и поступления", href: SITE.telegram }
     ];
     items.forEach(function (it) {
@@ -267,20 +266,13 @@
   function buildCustomOrder() {
     var box = $("#customActions");
     var msg = "Ассаламу алейкум! Хочу заказать книгу, которой нет в наличии: ";
-    // Главное действие: кнопка WhatsApp. Telegram: контурная кнопка рядом, как в форме заказа
-    var wa = el("a", "btn btn--gold");
-    wa.href = waLink(msg); wa.target = "_blank"; wa.rel = "noopener noreferrer";
-    var ic = el("span", "btn__icon"); ic.innerHTML = ICONS.whatsapp;
-    ic.firstChild.setAttribute("width", "20"); ic.firstChild.setAttribute("height", "20");
-    wa.append(ic, "Написать в WhatsApp");
-
-    var tg = el("a", "btn btn--ghost");
-    tg.href = SITE.telegramChat || SITE.telegram; tg.target = "_blank"; tg.rel = "noopener noreferrer";
+    var tg = el("a", "btn btn--gold");
+    tg.href = tgLink(msg); tg.target = "_blank"; tg.rel = "noopener noreferrer";
     var tic = el("span", "btn__icon"); tic.innerHTML = ICONS.telegram;
     tic.firstChild.setAttribute("width", "20"); tic.firstChild.setAttribute("height", "20");
     tg.append(tic, "Написать в Telegram");
 
-    box.append(wa, tg);
+    box.append(tg);
   }
 
   /* ---------- Drawer ---------- */
@@ -335,7 +327,7 @@
   $("#closeCart").addEventListener("click", closeCart);
   overlay.addEventListener("click", closeCart);
 
-  /* ---------- Форма и WhatsApp ---------- */
+  /* ---------- Форма и Telegram ---------- */
   var form = $("#orderForm");
 
   function syncDeliveryLabel() {
@@ -345,11 +337,9 @@
   form.addEventListener("change", function (e) { if (e.target.name === "delivery") syncDeliveryLabel(); });
   syncDeliveryLabel();
 
-  function waLink(text) {
-    return "https://wa.me/" + SITE.whatsapp + "?text=" + encodeURIComponent(text);
-  }
-  function waConfigured() {
-    return /^\d{11,15}$/.test(SITE.whatsapp) && !/^70{7,}/.test(SITE.whatsapp);
+  // Личный чат магазина в Telegram с готовым текстом сообщения
+  function tgLink(text) {
+    return SITE.telegramChat + "?text=" + encodeURIComponent(text);
   }
 
   function setErr(name, msg) {
@@ -421,19 +411,13 @@
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var status = $("#formStatus");
-    var via = (e.submitter && e.submitter.dataset.via) || "whatsapp";
     status.textContent = "";
     status.classList.remove("is-ok");
     if (!totalCount()) { status.textContent = "Корзина пуста"; return; }
     if (!validate()) return;
     var text = buildMessage();
-    if (via === "whatsapp") {
-      if (!waConfigured()) { status.textContent = "Номер WhatsApp магазина ещё не указан. Отправьте заказ в Telegram."; return; }
-      openChat(waLink(text));
-      return;
-    }
     var copied = copyText(text, e.submitter);
-    openChat((SITE.telegramChat || SITE.telegram) + "?text=" + encodeURIComponent(text));
+    openChat(tgLink(text));
     status.classList.add("is-ok");
     status.textContent = copied
       ? "Текст заказа скопирован. Если в Telegram он не появился сам, вставьте его в сообщение и отправьте."
